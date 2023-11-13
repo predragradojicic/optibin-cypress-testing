@@ -23,3 +23,16 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("loginToOptibin", () => {
+
+    cy.visit('http://3.224.166.164/')
+    cy.fixture('login-credentials.json').then((loginData) => {
+
+        cy.get('#username').type(loginData.admin)
+        cy.get('#password').type(loginData.passwordA)
+
+    })
+
+    cy.get('.interact-identity-main-button').contains('Log in').click()
+});
