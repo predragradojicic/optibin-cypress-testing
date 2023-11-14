@@ -19,7 +19,7 @@ describe('Log in Optibin.', () => {
     login_credentials.forEach((credentials) => {
 
         //Writes the object's during the Cypress run.
-        it.only(credentials.name, () => {
+        it(credentials.name, () => {
 
             //Instantiate the imported class.
             const login_optibin = new LoginOptibin();
