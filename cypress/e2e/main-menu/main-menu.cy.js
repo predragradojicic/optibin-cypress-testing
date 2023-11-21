@@ -21,7 +21,7 @@ describe('Testing funcionality of the main menu.', () => {
 
     })
 
-    it.only('Expand and collapse menu.', () => {
+    it('Expand and collapse menu.', () => {
         
         // Expand menu
         cy.get('.app-layout-sidebar > .app-sidebar > .app-sidebar-toggle > .noactive')

@@ -1,30 +1,30 @@
 [{
     
     "menu_element":".app-layout-sidebar > .app-sidebar > :nth-child(3) > .noactive",
-    "page_is_open": ".app-layout> .app-layout-main> .app-products"
+    "page": ".app-layout> .app-layout-main> .app-products"
  
 },
 {
     
     "menu_element":".app-layout-sidebar > .app-sidebar > :nth-child(4) > .noactive",
-    "page_is_open": ".app-layout> .app-layout-main> .app-products.app-bining"
+    "page": ".app-layout> .app-layout-main> .app-products.app-bining"
  
 },
 {
     
     "menu_element":".app-layout-sidebar > .app-sidebar > :nth-child(5) > .noactive",
-    "page_is_open": ".app-layout> .app-layout-main> .app-products.app-query"
+    "page": ".app-layout> .app-layout-main> .app-products.app-query"
  
 },
 {
     
     "menu_element":".app-layout-sidebar > .app-sidebar > :nth-child(6) > .noactive",
-    "page_is_open": ".app-layout> .app-layout-main> .app-accounts"
+    "page": ".app-layout> .app-layout-main> .app-accounts"
  
 },
 {
     
     "menu_element":".app-layout-sidebar > .app-sidebar > :nth-child(2) > .noactive",
-    "page_is_open": ".app-layout> .app-layout-main> .app-manufacturers"
+    "page": ".app-layout> .app-layout-main> .app-manufacturers"
  
 }]

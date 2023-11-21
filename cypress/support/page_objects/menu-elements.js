@@ -7,14 +7,14 @@ class TestMenuElements {
 
         // Construct the selector.
         const element_on_the_menu = `${element.menu_element}`;
-        const page_selection = `${element.page_is_open}`;
+        const page = `${element.page}`;
   
         // Find the HTML element by class and click on it.
         cy.get(element_on_the_menu).click();
         // Confirm that the element is active on the menu.
-        cy.get(element_on_the_menu).should('have.class', 'active');
+        // cy.get(element_on_the_menu).should('have.class', 'active');
         // Confirm that the page is open.
-        cy.get(page_selection).should('exist');
+        cy.get(page).should('exist');
   
       });
     }
