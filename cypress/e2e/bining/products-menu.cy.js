@@ -1,36 +1,172 @@
 /// <reference types="cypress" />
 
-describe('Testing funcionality of the main menu.', () => {
+import SelectProducts from '../../support/page_objects/select-products';
 
-     // Log in.
+// Open a folder.
+// const openFolder = (folder_name) => {
+
+//     // Select a folder from the Products menu.
+//     cy.get('.app-nav-map-item')
+//         .contains(folder_name)
+//         .click();
+// };
+
+describe('Testing funcionality of Bining menu on Products page.', () => {
+
+     // Log in and visit Products page.
      beforeEach(() => {
         cy.loginToOptibin();
         cy.wait(1000);
+        cy.visitBiningPage();
     
     })
 
-        
-    it('Testing the search bar.', () => {
+    it('Test "Products" breadcrumb navigation.', () => {
 
-        // Open Bining page.
-        cy.get('.app-layout-sidebar > .app-sidebar > :nth-child(4) > .noactive').click();
+        // const select_products = new SelectProducts();
+        // Click on Products in the breadcrumb navigation.
+        cy.get('.app-nav-map-items')
+            .find('.app-nav-map-beadcrumb')
+            .contains('Products')
+            .click();
+
+        // Products page is displayed.
+        SelectProducts.biningPageIsOpen();
+
+    });
+
+    it('Select a folder which is not empty.', () => {
+        
+        // Open Test P6 folder.
+        SelectProducts.openFolder('Test P6');
+
+        cy.wait(1000);
+
+        // Confirm that Test P6 is displayed. Pass: menu item and folder item.
+        SelectProducts.folderIsOpenOnBiningPage('Foo', 'Foo');
+
+    });
+
+    it('Test "Products/folder" breadcrumb navigations.', () => {
 
         // Open Test P6 folder.
+        SelectProducts.openFolder('Test P6');
+
+        // Click on "Test P6" on the breadcrumb navigation.
         cy.get('.app-nav-map-items')
-            .find('.app-nav-map-item')
+            .find('.app-nav-map-beadcrumb')
             .contains('Test P6')
             .click();
+
+        // Confirm that Test P6 is displayed. Pass: menu item, title and folder item.
+        SelectProducts.folderIsOpenOnBiningPage('Foo', 'Foo');
+
+        // Go to "Products" using the breadcrumb navigation.
+        cy.get('.app-nav-map-items')
+            .find('.app-nav-map-beadcrumb')
+            .contains('Products')
+            .click();
+
+        cy.wait(1000);
+
+        // Products page is displayed.
+        SelectProducts.biningPageIsOpen();
+
+    });
+
+    it('Select an empty folder within another folder.', () => {
+
+        // Open Test P6 folder.
+        SelectProducts.openFolder('Test P6');
+
+        // Open Bar 1 folder.
+        SelectProducts.openFolder('Bar 1');
+
+        cy.wait(1000);
+
+        // Confirm that Test P6 is displayed. Pass: menu item, title and folder item.
+        SelectProducts.folderIsOpenOnBiningPage('No items', 'No Items');
+
+    });
+
+    it('Test "folder/folder" breadcrumb navigations.', () => {
+        
+        // Open Test P6 folder.
+        SelectProducts.openFolder('Test P6');
+
+        // Open Bar 1 folder.
+        SelectProducts.openFolder('Bar 1');
+
+        // Test "folder->folder" breadcrumb navigation.
+        cy.get('.app-nav-map-items')
+            .find('.app-nav-map-beadcrumb')
+            .contains('Bar 1')
+            .click();
+
+        // Confirm that Test P6 is displayed. Pass: menu item, title and folder item.
+        SelectProducts.folderIsOpenOnBiningPage('No items', 'No Items');
+
+        // Test "folder<-folder" breadcrumb navigation.
+        cy.get('.app-nav-map-items')
+            .find('.app-nav-map-beadcrumb')
+            .contains('Test P6')
+            .click();
+
+        // Confirm that Test P6 is displayed. Pass: menu item, title and folder item.
+        SelectProducts.folderIsOpenOnBiningPage('Foo', 'Foo');
+    });
+
+    it('Select a fixture within a folder.', () => {
+
+        // Open Test P6 folder.
+        SelectProducts.openFolder('Test P6');
+
+        // Click on Foo.
+        SelectProducts.openFolder('Foo');
+
+        // Confirm that fixture Foo is open. Pass: menu item, title and body messagge.
+        SelectProducts.fixtureIsOpen('Foo', 'Foo', 'No Selected Channel');
+        
+    });
+
+    it('Test "folder/fixture" breadcrumd navigation.', () => {
+        
+        // Open Test P6 folder.
+        SelectProducts.openFolder('Test P6');
+        cy.wait(1000);
+
+        // Open Foo fixture.
+        SelectProducts.openFolder('Foo');
+        cy.wait(1000);
+
+        // Test "folder<-fixture" breadcrumb navigation.
+        cy.get('.app-nav-map-items')
+            .find('.app-nav-map-beadcrumb')
+            .contains('Test P6')
+            .click();
+
+        cy.wait(1000);
+        
+        // Confirm that Test P6 is displayed. Pass: menu item, title and folder item.
+        SelectProducts.folderIsOpenOnBiningPage('Foo', 'Foo');
+
+    });
+
+    it('Testing the search bar.', () => {
+
+        // Open Test P6 folder.
+        SelectProducts.openFolder('Test P6');
 
         // Initial check: All items are visible.
         cy.get('.app-nav-map-items')
           .find('.app-nav-map-item')
           .should('have.length', 3);
     
-        // Type "Test" in the search bar.
+        // Type a phrase which is a part of names of two different items in the search bar.
         cy.get('.app-input')
             .type('Bar');
     
-        // Check: Only "Test" is visible.
+        // Check if only that two items are visible.
         cy.get('.app-nav-map-items')
             .find('.app-nav-map-item')
             .should('have.length', 4)
@@ -40,116 +176,10 @@ describe('Testing funcionality of the main menu.', () => {
         cy.get('.app-input')
             .clear();
     
-        // Check: All items are visible again.
+        // Check if all items are visible again.
         cy.get('.app-nav-map-items')
             .find('.app-nav-map-item')
             .should('have.length', 3);
-
-    });
-
-    it('Testing functionality of the Products menu.', () => {
-
-        // Open Bining page.
-        cy.get('.app-layout-sidebar > .app-sidebar > :nth-child(4) > .noactive').click();
-
-        cy.get('.app-products-folder-item')
-            .contains('Test P1');
-
-        // Open Test P6 folder.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-item')
-            .contains('Test P6')
-            .click();
-
-            cy.wait(1000);
-
-        // Confirm that Test P6 menu is displayed.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-item')
-            .contains('Foo')
-
-        // Confirm that folder Test P6 is open.
-        cy.get('.app-products-folder-item')
-            .contains('Foo')
-
-        cy.get('.app-products-folder-item')
-            .find('.mr10')
-            .contains('Test P1')
-            .should('not.exist');
-
-        // Test breadcrumb navigation.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-beadcrumb')
-            .contains('Test P6')
-            .click();
-
-        // Open Bar 1 folder.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-item')
-            .contains('Bar 1')
-            .click();
-
-        // Confirm that folder Bar 1 is open.
-        cy.get('.app-products-folder-item')
-            .find('.mr10')
-            .contains('Bar 1')
-            .should('not.exist');
-
-        // Test breadcrumb navigation.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-beadcrumb')
-            .contains('Bar 1')
-            .click();
-
-        // Click on Test P6.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-beadcrumb')
-            .contains('Test P6')
-            .click();
-
-        // Confirm that Bar 1 is removed from the navigation. 
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-beadcrumb')
-            .contains('Bar 1')
-            .should('not.exist');
-
-        // Confirm that folder Test P6 is open.
-        cy.get('.app-products-folder-item')
-            .contains('Bar 1')
-
-        // Click on Foo.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-item')
-            .contains('Foo')
-            .click();
-
-        // Confirm that fixture Foo is open.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-beadcrumb')
-            .contains('Bar 1')
-            .should('not.exist');
-
-        // Confirm that Foo is added to the navigation. 
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-item.active')
-            .contains('Foo')
-
-        // Test breadcrumb navigation.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-beadcrumb')
-            .contains('Products')
-            .click();
-
-        // Confirm that Test P6 and Foo removed from the navigation. 
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-beadcrumb')
-            .contains('Test P6')
-            .should('not.exist');
-
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-beadcrumb')
-            .contains('Foo')
-            .should('not.exist');
 
     });
 

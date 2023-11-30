@@ -1,69 +1,51 @@
 /// <reference types="cypress" />
 
 import IncorrectValues from '../../support/page_objects/incorrect-values';
+import CorrectValues from '../../support/page_objects/correct-values';
+import SelectProducts from '../../support/page_objects/select-products';
 
 describe('Testing Number of Setups on the Bining page.', () => {
 
-    // Log in.
-    beforeEach(() => {
-       cy.loginToOptibin();
-       cy.wait(1000);
-   
-   })
+     // Log in.
+     beforeEach(() => {
+          cy.loginToOptibin();
+          cy.wait(1000);
+          cy.visitBiningPage();
+     
+     })
+          
+     it('Testing Number of Setups on the Bining page.', () => {
+          
+          // Open Test P6 folder.
+          SelectProducts.openFolder('Test P6');
 
-       
-   it('Testing Number of Setups on the Bining page.', () => {
-       // Open Bining page.
-       cy.get('.app-layout-sidebar > .app-sidebar > :nth-child(4) > .noactive').click();
+          // Select Foo bining product.
+          SelectProducts.openFolder('Foo');
 
-       // Open Test P6 folder.
-       cy.get('.app-nav-map-items')
-           .find('.app-nav-map-item')
-           .contains('Test P6')
-           .click();
+          // Number of setups should have value 0.
+          cy.get(':nth-child(3) > .app-input')
+               .should('have.value', '0');
 
-       // Select Foo bining product.
-       cy.get('.app-nav-map-items > :nth-child(4)')
-            .click();
+          // "Run" button should not be clickable.
+          cy.get('.app-btn-secondary').should('be.disabled');
 
-       // Number of setups should have value 0.
-       cy.get(':nth-child(3) > .app-input')
-            .should('have.value', '0');
+          // Check if border is red after typing an incorrect value.
+          cy.get(':nth-child(3) > .app-input')
+               .type('.');
+          cy.get('.app-flex')
+               .click();
+          cy.get(':nth-child(3) > .app-input')
+               .should('have.class', 'app-border-red');
 
-       // "Run" button should not be clickable.
-       cy.get('.app-btn-secondary').should('be.disabled');
+          // "Run" button should not be clickable when border is red.
+          cy.get('.app-btn-secondary').should('be.disabled');
 
-       IncorrectValues.incorrectValues();
+          // Type different incorrect values. Border should be red.
+          IncorrectValues.incorrectValues('incorrect-values.json', ':nth-child(3) > .app-input');
 
-       // Type incorrect value and check if the input field has red border.
-     //   cy.fixture('incorrect-values.json').then((data) => {
-     //      // Iterate over the values in the JSON file
-     //      data.values.forEach((value, index) => {
-     //           // Find the input element using :nth-child(3) > .app-input
-     //           cy.get(':nth-child(3) > .app-input').type(value);
+          // Type correct value and check if the input field has no red border and has that value.
+          CorrectValues.correctValues(':nth-child(3) > .app-input');
 
-     //           cy.get('.app-flex')
-     //           .click();
-     //           cy.get(':nth-child(3) > .app-input')
-     //                .should('have.class', 'app-border-red');
-
-     //           // "Run" button should not be clickable.
-     //           cy.get('.app-btn-secondary').should('be.disabled');
-
-     //      });
-     //      });
-
-       // Type correct value and check if the input field has no red border and has that value.
-       cy.get(':nth-child(3) > .app-input')
-            .clear();
-       cy.get(':nth-child(3) > .app-input')
-            .type('6');
-       cy.get('.app-flex')
-            .click();
-       cy.get(':nth-child(3) > .app-input')
-          .should('have.value', '6')
-          .should('have.class', 'app-input');
-
-   })
+     })
 
 })

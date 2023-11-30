@@ -23,20 +23,20 @@ class LoginOptibin{
     }
 
     loginWithEmptyUsername(password) {
-        this.loginElements.username().clear()
+        this.loginElements.username().clear();
         this.loginElements.password().clear().type(password);
         this.loginElements.loginButton().click();
     }
 
     loginWithEmptyPassword(username) {
         this.loginElements.username().clear().type(username);
-        this.loginElements.password().clear()
+        this.loginElements.password().clear();
         this.loginElements.loginButton().click();
     }
 
     loginWithEmptyCredentials() {
-        this.loginElements.username().clear()
-        this.loginElements.password().clear()
+        this.loginElements.username().clear();
+        this.loginElements.password().clear();
         this.loginElements.loginButton().click();
     }
     

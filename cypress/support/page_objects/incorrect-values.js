@@ -1,20 +1,40 @@
 
 class IncorrectValues {
-    static incorrectValues() {
+    static incorrectValues(input_data, input_element) {
 
-      cy.fixture('incorrect-values.json').then((data) => {
+      cy.fixture(input_data).then((data) => {
         // Iterate over the values in the JSON file
-        data.values.forEach((value, index) => {
-             // Find the input element using :nth-child(3) > .app-input
-             cy.get(':nth-child(3) > .app-input').type(value);
+        data.values.forEach((value) => {
+             // Find the input element and type values from JSON file.
+             cy.get(input_element).clear().type('{selectall}').type(value);
 
-             cy.get('.app-flex')
+             // Click outside of the input element.
+             cy.get('.app-navbar-title')
              .click();
-             cy.get(':nth-child(3) > .app-input')
+
+             // Border should be red.
+             cy.get(input_element)
                   .should('have.class', 'app-border-red');
 
-             // "Run" button should not be clickable.
-             cy.get('.app-btn-secondary').should('be.disabled');
+        });
+      });
+    }
+
+    static unsupportedInventory(input_data, input_element) {
+
+      cy.fixture(input_data).then((data) => {
+        // Iterate over the values in the JSON file
+        data.values.forEach((value) => {
+             // Find the input element and type values from JSON file.
+             cy.get(input_element).clear().type('{selectall}').type(value);
+
+             // Click outside of the input element.
+             cy.get('.app-navbar-title')
+             .click();
+
+             // Border should be red.
+             cy.get(input_element)
+                  .should('have.value', '0');
 
         });
       });
@@ -22,32 +42,3 @@ class IncorrectValues {
   }
   
   export default IncorrectValues;
-
-
-
-
-
-
-// // Create a class to handle element interactions
-// class ElementInteraction {
-//     // Function to interact with HTML elements based on JSON data
-//     static interactWithElements() {
-//       // Read the JSON file from the fixtures folder
-//       cy.fixture('menu-elements.json').then((jsonArray) => {
-//         // Iterate over each object in the JSON array
-//         jsonArray.forEach((element) => {
-//           // Construct the selector using class
-//           const selector = `${element.Page}`;
-  
-//           // Find the HTML element by class and click on it
-//           cy.get(selector).click();
-  
-//           // Add additional assertions or interactions as needed
-//         });
-//       });
-//     }
-//   }
-  
-//   // Export the class
-//   export default ElementInteraction;
-  

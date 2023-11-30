@@ -32,7 +32,21 @@ describe('Testing funcionality of the main menu.', () => {
 
     });
 
-    it('Testing functionality of the Manufacturers menu.', () => {
+    it('Testing if the first manufacturer is displayed after logging in.', () => {
+
+        // Confirm that Test P1 menu is displayed.
+        cy.get('.app-nav-map-items')
+            .find('.app-nav-map-item.active')
+            .contains('Cree (ML-E,ML-B)');
+
+        // Confirm that manufacturer Test P1 is open.
+        cy.get('.app-manufacturers-header-title-text.mb10')
+            .find('.app-manufacturers-header-title-text-active')
+            .contains('Cree (ML-E,ML-B)');
+
+    });
+
+    it('Testing functionality of the Manufacturers menu: open two different manufacturers.', () => {
 
         // Open Test P1 manufacturer.
         cy.get('.app-nav-map-items')
