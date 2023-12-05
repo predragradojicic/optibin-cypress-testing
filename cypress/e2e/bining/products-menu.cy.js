@@ -2,16 +2,7 @@
 
 import SelectProducts from '../../support/page_objects/select-products';
 
-// Open a folder.
-// const openFolder = (folder_name) => {
-
-//     // Select a folder from the Products menu.
-//     cy.get('.app-nav-map-item')
-//         .contains(folder_name)
-//         .click();
-// };
-
-describe('Testing funcionality of Bining menu on Products page.', () => {
+describe('Testing funcionality of Products menu on Bining page.', () => {
 
      // Log in and visit Products page.
      beforeEach(() => {
@@ -23,14 +14,13 @@ describe('Testing funcionality of Bining menu on Products page.', () => {
 
     it('Test "Products" breadcrumb navigation.', () => {
 
-        // const select_products = new SelectProducts();
         // Click on Products in the breadcrumb navigation.
         cy.get('.app-nav-map-items')
             .find('.app-nav-map-beadcrumb')
             .contains('Products')
             .click();
 
-        // Products page is displayed.
+        // Bining page is displayed.
         SelectProducts.biningPageIsOpen();
 
     });
@@ -58,7 +48,7 @@ describe('Testing funcionality of Bining menu on Products page.', () => {
             .contains('Test P6')
             .click();
 
-        // Confirm that Test P6 is displayed. Pass: menu item, title and folder item.
+        // Confirm that Test P6 is displayed. Pass: menu item and folder item.
         SelectProducts.folderIsOpenOnBiningPage('Foo', 'Foo');
 
         // Go to "Products" using the breadcrumb navigation.
@@ -84,7 +74,7 @@ describe('Testing funcionality of Bining menu on Products page.', () => {
 
         cy.wait(1000);
 
-        // Confirm that Test P6 is displayed. Pass: menu item, title and folder item.
+        // Confirm that Bar 1 is displayed. Pass: menu item and folder item.
         SelectProducts.folderIsOpenOnBiningPage('No items', 'No Items');
 
     });
@@ -103,7 +93,7 @@ describe('Testing funcionality of Bining menu on Products page.', () => {
             .contains('Bar 1')
             .click();
 
-        // Confirm that Test P6 is displayed. Pass: menu item, title and folder item.
+        // Confirm that Test P6 is displayed. Pass: menu item and folder item.
         SelectProducts.folderIsOpenOnBiningPage('No items', 'No Items');
 
         // Test "folder<-folder" breadcrumb navigation.
@@ -112,7 +102,7 @@ describe('Testing funcionality of Bining menu on Products page.', () => {
             .contains('Test P6')
             .click();
 
-        // Confirm that Test P6 is displayed. Pass: menu item, title and folder item.
+        // Confirm that Test P6 is displayed. Pass: menu item and folder item.
         SelectProducts.folderIsOpenOnBiningPage('Foo', 'Foo');
     });
 
@@ -147,7 +137,7 @@ describe('Testing funcionality of Bining menu on Products page.', () => {
 
         cy.wait(1000);
         
-        // Confirm that Test P6 is displayed. Pass: menu item, title and folder item.
+        // Confirm that Test P6 is displayed. Pass: menu item and folder item.
         SelectProducts.folderIsOpenOnBiningPage('Foo', 'Foo');
 
     });
@@ -166,7 +156,7 @@ describe('Testing funcionality of Bining menu on Products page.', () => {
         cy.get('.app-input')
             .type('Bar');
     
-        // Check if only that two items are visible.
+        // Check if only that two items are visible. Expect four because two are filtersd products, and the other two are filtered by name and PCA.
         cy.get('.app-nav-map-items')
             .find('.app-nav-map-item')
             .should('have.length', 4)

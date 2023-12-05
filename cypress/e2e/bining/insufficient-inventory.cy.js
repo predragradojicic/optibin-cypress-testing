@@ -1,8 +1,10 @@
 /// <reference types="cypress" />
 
 import SelectProducts from '../../support/page_objects/select-products';
+import InputFields from '../../support/page_objects/input-fields';
+import Button from '../../support/page_objects/buttons';
 
-describe('Testing PCA Number on the Bining page.', () => {
+describe('Testing Insufficient Inventory case on the Bining page.', () => {
 
     // Log in.
     beforeEach(() => {
@@ -12,55 +14,39 @@ describe('Testing PCA Number on the Bining page.', () => {
 
     })
        
-    it('Testing Comment on the Bining page.', () => {
+    it('Testing Insufficient Inventory case on the Bining page.', () => {
         // Open Test P6 folder.
         SelectProducts.openFolder('Test P6');
 
-        // Sellect a bining product with no channels.
+        // Sellect a bining product with two channels.
         SelectProducts.openFolder('Foo');
 
-        const channels = ['Chrom 1 P3 (test 6)', 'Wav 01 P2 (test 6)'];
+        // Select a channel.
+        cy.get('.app-products-channels-block-item').contains('Chrom 1 P3 (test 6)').click();
 
-        channels.forEach((channel) => {
+        // Fill one Inventory Count, Number Of Setups and Spool Size.
+        InputFields.firstInventoryCount().type('{selectall}').type('5');
+        InputFields.numberOfSetups().clear().type('3');
+        InputFields.spoolSize().clear().type('30');
 
-            cy.get('.app-products-channels-block-item')
-                .contains(channel)
-                .click();
+        // The close and OK buttons in the insufficent inventory window.
+        const buttons = ['.app-modal-content-close > img', '.app-yes-no-modal > .app-btn-secondary'];
 
-            const buttons = ['.app-modal-content-close > img', '.app-yes-no-modal > .app-btn-secondary'];
+        buttons.forEach((button) => {
+    
+            // Run.
+            Button.Run().click();
+            cy.wait(5000);
 
-            buttons.forEach((button) => {
-
-                cy.get(':nth-child(1) > div > :nth-child(1) > :nth-child(3) > .app-input')
-                    .clear()
-                    .type('{selectall}').type('5');
-
-                cy.get('.mt10.app-flex > :nth-child(3) > .app-input')
-                    .clear()
-                    .type('3');
-                cy.get('.mt10.app-flex > :nth-child(4) > .app-input')
-                    .clear()
-                    .type('30');
-
-                cy.get('.app-btn-secondary').click();
-                cy.wait(5000);
-        
-                cy.get('.app-yes-no-modal > h2').should('contain', 'Binning action failed: The following channels might have insufficent inventory!');
-                cy.get(button).click();
-                    
-                cy.get('.app-yes-no-modal')
-                    .should('not.exist');
-                cy.get(':nth-child(1) > div > :nth-child(1) > :nth-child(3) > .app-input')
-                    .should('have.value', '5');
-                cy.get('.app-flex > :nth-child(3) > .app-input')
-                    .should('have.value', '3');
-                cy.get('.app-flex > :nth-child(4) > .app-input')
-                    .should('have.value', '30');
-                cy.get('.app-btn-secondary')
-                    .contains('Run')
-                    .should('not.be.disabled');
-
-            });
+            // Confirm body text and click on one of the buttons.
+            cy.get('.app-yes-no-modal > h2').should('contain', 'Binning action failed: The following channels might have insufficent inventory!');
+            cy.get(button).click();
+                
+            // The window is closed. Input values are saved. Run button is enabled.
+            InputFields.firstInventoryCount().should('have.value', '5');
+            InputFields.numberOfSetups().should('have.value', '3');
+            InputFields.spoolSize().should('have.value', '30');
+            Button.Run().should('not.be.disabled');
 
         });
 

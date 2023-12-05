@@ -3,51 +3,40 @@
 import IncorrectValues from '../../support/page_objects/incorrect-values';
 import CorrectValues from '../../support/page_objects/correct-values';
 import SelectProducts from '../../support/page_objects/select-products';
+import InputFields from '../../support/page_objects/input-fields';
 
-describe('Testing Spool Size on the Bining page.', () => {
+describe('Testing Number of Setups on the Bining page.', () => {
 
-    // Log in.
-    beforeEach(() => {
-        cy.loginToOptibin();
-        cy.wait(1000);
-        cy.visitBiningPage();
+     // Log in.
+     beforeEach(() => {
+          cy.loginToOptibin();
+          cy.wait(1000);
+          cy.visitBiningPage();
+     
+     })
+          
+     it('Testing Spool Size on the Bining page.', () => {
+          
+          // Open Test P6 folder.
+          SelectProducts.openFolder('Test P6');
 
-    })
-       
-   it('Testing Spool Size on the Bining page.', () => {
+          // Select Foo bining product.
+          SelectProducts.openFolder('Foo');
 
-        // Open Test P6 folder.
-        SelectProducts.openFolder('Test P6');
+          // Spool Size should have value 0.
+          InputFields.spoolSize().should('have.value', '0');
 
-        // Select Foo bining product.
-        SelectProducts.openFolder('Foo');
+          // Check if border is red after typing an incorrect value.
+          InputFields.spoolSize().type('.');
+          cy.get('.app-flex').click();
+          InputFields.spoolSize().should('have.class', 'app-border-red');
 
-        // Spool size should have value 0.
-        cy.get(':nth-child(4) > .app-input')
-            .should('have.value', '0');
+          // Type different incorrect values. Border should be red. Pass: JSON file from fixtures which contains incorrect values and the input field.
+          IncorrectValues.incorrectValues('incorrect-values.json', ':nth-child(4) > .app-input');
 
-        // "Run" button should not be clickable.
-        cy.get('.app-btn-secondary')
-            .should('be.disabled');
+          // Type correct value and check if the input field has no red border and if that value is displayed. Pass: the input field.
+          CorrectValues.correctValues(':nth-child(4) > .app-input');
 
-        // Type incorrect value and check if the input field has red border.
-        cy.get(':nth-child(4) > .app-input')
-            .type('.');
-        cy.get('.app-flex')
-            .click();
-        cy.get(':nth-child(4) > .app-input')
-            .should('have.class', 'app-border-red');
-
-        // "Run" button should not be clickable when border is red.
-        cy.get('.app-btn-secondary')
-            .should('be.disabled');
-
-        // Type different incorrect values. Border should be red.
-        IncorrectValues.incorrectValues('incorrect-values.json', ':nth-child(3) > .app-input');
-
-        // Type correct value and check if the input field has no red border and has that value.
-        CorrectValues.correctValues(':nth-child(3) > .app-input');
-
-    })
+     })
 
 })

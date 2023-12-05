@@ -1,8 +1,10 @@
 /// <reference types="cypress" />
 
 import SelectProducts from '../../support/page_objects/select-products';
+import InputFields from '../../support/page_objects/input-fields';
+import Button from '../../support/page_objects/buttons';
 
-describe('Testing PCA Number on the Bining page.', () => {
+describe('Testing cases when Run button is enabled on Bining page.', () => {
 
     // Log in.
     beforeEach(() => {
@@ -11,63 +13,62 @@ describe('Testing PCA Number on the Bining page.', () => {
         cy.visitBiningPage();
 
     })
-
-    const inputValues = [10, 20, 30];
        
-    it('Testing Comment on the Bining page.', () => {
+    it('Testing cases when Run button is enabled on Bining page.', () => {
         // Open Test P6 folder.
         SelectProducts.openFolder('Test P6');
 
-        // Sellect a bining product with no channels.
+        // Sellect a bining product with two channels.
         SelectProducts.openFolder('Foo');
 
-        // "Run" button should not be clickable.
-        cy.get('.app-btn-secondary')
-            .should('be.disabled');
+        // "Run" button should be disabled.
+        Button.Run().should('be.disabled');
 
+        // Channels.
         const channels = ['Chrom 1 P3 (test 6)', 'Wav 01 P2 (test 6)'];
 
+        // Run button should be enabled only if a value greather than 0 is entered in these fields: Number Of Setups, Spool Size and at least one Inventory Count.
         channels.forEach((channel) => {
 
             cy.get('.app-products-channels-block-item')
                 .contains(channel)
                 .click();
 
-            cy.get(':nth-child(1) > div > :nth-child(1) > :nth-child(3) > .app-input')
-                .clear()
-                .type('{selectall}').type('5');
+            // Type 5 in the first Inventory Count.
+            InputFields.firstInventoryCount().type('{selectall}').type('5');
 
-            cy.get('.mt10.app-flex > :nth-child(3) > .app-input')
-                .clear()
-                .type('3');
+            // "Run" button should be disabled.
+            Button.Run().should('be.disabled');
 
-            cy.get('.mt10.app-flex > :nth-child(4) > .app-input')
-                .clear()
-                .type('30');
+            // Fill Number Of Setups.
+            InputFields.numberOfSetups().clear().type('3');
 
-            cy.get('.app-btn-secondary').should('be.enabled');
+            // "Run" button is disabled when Spool Size is 0.
+            Button.Run().should('be.disabled');
 
+            // Fill Spool Size.
+            InputFields.spoolSize().clear().type('30');
 
-            cy.get(':nth-child(1) > div > :nth-child(1) > :nth-child(3) > .app-input')
-                .clear()
-            cy.get('.app-btn-secondary').should('be.disabled');
-            cy.get(':nth-child(1) > div > :nth-child(1) > :nth-child(3) > .app-input')
-                .clear()
-                .type('{selectall}').type('5');
+            // "Run" button should be enabled.
+            Button.Run().should('not.be.disabled');
 
-            cy.get('.mt10.app-flex > :nth-child(3) > .app-input')
-                .clear()
-            cy.get('.app-btn-secondary').should('be.disabled');
-            cy.get('.mt10.app-flex > :nth-child(3) > .app-input')
-                .clear()
-                .type('3');
+            // "Run" button is disabled when Inventory Count is 0.
+            InputFields.firstInventoryCount().clear();
+            Button.Run().should('be.disabled');
 
-            cy.get('.mt10.app-flex > :nth-child(4) > .app-input')
-                .clear()
-            cy.get('.app-btn-secondary').should('be.disabled');
-            cy.get('.mt10.app-flex > :nth-child(4) > .app-input')
-                .clear()
-                .type('30');
+            // "Run" button is disabled when Number Of Setups is 0.
+            InputFields.firstInventoryCount().type('{selectall}').type('5');
+            InputFields.numberOfSetups().clear();
+            Button.Run().should('be.disabled');
+
+            // "Run" button is disabled when Number Of Setups has incorrect value.
+            InputFields.numberOfSetups().type('4.5');
+            Button.Run().should('be.disabled');
+
+            // "Run" button is disabled when Number Of Setups has incorrect value.
+            InputFields.numberOfSetups().clear().type('3');
+            InputFields.spoolSize().clear().type('4.5');
+            Button.Run().should('be.disabled');
 
         });
 

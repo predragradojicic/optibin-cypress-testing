@@ -14,6 +14,7 @@ class SelectProducts {
     
     };
 
+    // Confirm that Bining page is open.
     static biningPageIsOpen() {
 
         // Folder Test P6 is present on the page.
@@ -69,7 +70,7 @@ class SelectProducts {
     
     };
     
-    // Confirm that the fixture is open.
+    // Confirm that fixture is open.
     static fixtureIsOpen(menu_item, fixture_title, body_messagge) {
     
         // Confirm that menu is displayed.

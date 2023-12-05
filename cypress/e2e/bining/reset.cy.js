@@ -1,8 +1,10 @@
 /// <reference types="cypress" />
 
 import SelectProducts from '../../support/page_objects/select-products';
+import InputFields from '../../support/page_objects/input-fields';
+import Button from '../../support/page_objects/buttons';
 
-describe('Testing PCA Number on the Bining page.', () => {
+describe('Testing Reset button on the Bining page.', () => {
 
     // Log in.
     beforeEach(() => {
@@ -12,45 +14,54 @@ describe('Testing PCA Number on the Bining page.', () => {
 
     })
        
-    it('Testing Comment on the Bining page.', () => {
+    it('Testing Reset button on the Bining page.', () => {
         // Open Test P6 folder.
         SelectProducts.openFolder('Test P6');
 
-        // Sellect a bining product with no channels.
+        // Sellect a bining product with two channels.
         SelectProducts.openFolder('Foo');
 
-        cy.get(':nth-child(3) > .app-input')
-            .type('{selectall}').type('5');
+        // Fill Number Of Setups and Spool Size.
+        InputFields.numberOfSetups().clear().type('3');
+        InputFields.spoolSize().clear().type('30');
 
-        cy.get(':nth-child(4) > .app-input')
-        .type('{selectall}').type('5');
-
-        cy.get('.app-products-header-title > :nth-child(4)').click();
-
-        cy.get(':nth-child(3) > .app-input')
-            .should('have.value', '0');
-
-        cy.get(':nth-child(4) > .app-input')
-            .should('have.value', '0');
-
+        // Channels.
         const values = ['Chrom 1 P3 (test 6)', 'Wav 01 P2 (test 6)'];
 
-        values.forEach((value) => {
+        values.forEach((value, valueIndex) => {
 
-            // Find the input element using :nth-child(3) > .app-input
+            // This inner forEach loop runs only during the first iteration of the outer loop.
+            if (valueIndex === 0) {
+
+                values.forEach((value) => {
+
+                    // Select a channel.
+                    cy.get('.app-products-channels-block-item')
+                        .contains(value)
+                        .click();
+        
+                    // Type 5 in the first Inventory Count.
+                    InputFields.firstInventoryCount().type('{selectall}').type('5');
+                
+                });
+            }
+
+            // Select a channel.
             cy.get('.app-products-channels-block-item')
                 .contains(value)
                 .click();
 
-            cy.get(':nth-child(1) > div > :nth-child(1) > :nth-child(3) > .app-input')
-                .clear()
-                .type('{selectall}').type('5');
-            
-            cy.get('.app-products-header-title > :nth-child(4)').click();
+            // Click on Reset.
+            Button.Reset().click();
 
-            cy.get(':nth-child(1) > div > :nth-child(1) > :nth-child(3) > .app-input')
-                .should('have.value', '0');
+            // All inputs are 0.
+            InputFields.firstInventoryCount().should('have.value', '0');
+            InputFields.numberOfSetups().should('have.value', '0');
+            InputFields.spoolSize().should('have.value', '0');
+            
         });
+
+        
         
     })
 })

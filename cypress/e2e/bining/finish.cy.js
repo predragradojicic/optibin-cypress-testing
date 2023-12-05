@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 
 import SelectProducts from '../../support/page_objects/select-products';
-import InventoryCount from '../../support/page_objects/inventory-count';
+import InputFields from '../../support/page_objects/input-fields';
+import Button from '../../support/page_objects/buttons';
 
-
-describe('Testing PCA Number on the Bining page.', () => {
+describe('Testing Finish button on Bining page.', () => {
 
     // Log in.
     beforeEach(() => {
@@ -14,44 +14,54 @@ describe('Testing PCA Number on the Bining page.', () => {
 
     })
        
-    it('Testing Comment on the Bining page.', () => {
+    it('Testing Finish button on Bining page.', () => {
         // Open Test P6 folder.
         SelectProducts.openFolder('Test P6');
 
-        // Sellect a bining product with no channels.
+        // Sellect a bining product with two channels.
         SelectProducts.openFolder('Foo');
 
-        InventoryCount.fillInventoryCount(55);
+        // Channels.
+        const channels = ['Chrom 1 P3 (test 6)', 'Wav 01 P2 (test 6)'];
+        
+        // Fill Inventory Count fields on both channels.
+        InputFields.fillInventoryCount(channels, 55);
 
-        cy.get('.app-flex > :nth-child(3) > .app-input').clear().type('3');
-        cy.get('.app-flex > :nth-child(4) > .app-input').clear().type('30');
-        cy.get('.app-btn-secondary').click();
+        // Fill Number Of Setups and Spool Size, and then start a run.
+        InputFields.numberOfSetups().clear().type('3');
+        InputFields.spoolSize().clear().type('30');
+        Button.Run().click();
         cy.wait(6000);
 
-        cy.get('.app-btn-secondary').contains('Save').click();
+        // Click on Save and Finish.
+        Button.Save().click();
         cy.wait(2000);
-        cy.get('.app-btn-neutral').contains('Finish').click();
+        Button.Finish().click();
         cy.wait(2000);
 
-        cy.get('.app-btn-secondary').contains('Run').should('be.disabled');
-        cy.get('.app-btn-neutral').contains('Reset').should('exist');
-        cy.get('.app-btn-neutral').contains('Upload').should('exist');
-        cy.get('.app-btn-neutral').contains('Download').should('exist');
+        // Confirm all button's presence.
+        Button.Run().should('be.disabled');
+        Button.Reset().should('exist');
+        Button.Upload().should('exist');
+        Button.Download().should('exist');
 
-        cy.get('.app-products-header-title.app-bining-control').contains('Save').should('not.exist');
-        cy.get('.app-products-header-title.app-bining-control').contains('Cancel').should('not.exist');
-        cy.get('.app-products-header-title.app-bining-control').contains('Finish').should('not.exist');
-        cy.get('.app-products-header-title.app-bining-control').contains('Export').should('not.exist');
+        Button.Save().should('not.exist');
+        Button.Cancel().should('not.exist');
+        Button.Finish().should('not.exist');
+        Button.Export().should('not.exist');
 
-        cy.get(':nth-child(3) > .app-input')
-               .should('have.class', 'app-border-red');
+        // Number Of Setups and Spool Size are 0 and both have red borders.
+        InputFields.numberOfSetups().should('have.class', 'app-border-red').and('have.value', '0');
+        InputFields.spoolSize().should('have.class', 'app-border-red').and('have.value', '0');
 
-        cy.get(':nth-child(4) > .app-input')
-            .should('have.class', 'app-border-red');
+        // Inventory Count is 0 on both channels.
+        InputFields.firstInventoryCount().should('have.value', '0');
+        
+        cy.get('.app-products-channels-block-item')
+                .contains(channels[0])
+                .click();
 
-        cy.get(':nth-child(1) > div > :nth-child(1) > :nth-child(3) > .app-input').should('have.value', '0');
-        cy.get('.app-products-channels-block-items > :nth-child(1)').click();
-        cy.get(':nth-child(1) > div > :nth-child(1) > :nth-child(3) > .app-input').should('have.value', '0');
+        InputFields.firstInventoryCount().should('have.value', '0');
 
     })
 })

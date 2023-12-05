@@ -3,6 +3,7 @@
 import IncorrectValues from '../../support/page_objects/incorrect-values';
 import CorrectValues from '../../support/page_objects/correct-values';
 import SelectProducts from '../../support/page_objects/select-products';
+import InputFields from '../../support/page_objects/input-fields';
 
 describe('Testing Number of Setups on the Bining page.', () => {
 
@@ -23,27 +24,17 @@ describe('Testing Number of Setups on the Bining page.', () => {
           SelectProducts.openFolder('Foo');
 
           // Number of setups should have value 0.
-          cy.get(':nth-child(3) > .app-input')
-               .should('have.value', '0');
-
-          // "Run" button should not be clickable.
-          cy.get('.app-btn-secondary').should('be.disabled');
+          InputFields.numberOfSetups().should('have.value', '0');
 
           // Check if border is red after typing an incorrect value.
-          cy.get(':nth-child(3) > .app-input')
-               .type('.');
-          cy.get('.app-flex')
-               .click();
-          cy.get(':nth-child(3) > .app-input')
-               .should('have.class', 'app-border-red');
+          InputFields.numberOfSetups().type('.');
+          cy.get('.app-flex').click();
+          InputFields.numberOfSetups().should('have.class', 'app-border-red');
 
-          // "Run" button should not be clickable when border is red.
-          cy.get('.app-btn-secondary').should('be.disabled');
-
-          // Type different incorrect values. Border should be red.
+          // Type different incorrect values. Border should be red. Pass: JSON file from fixtures which contains incorrect values and the input field.
           IncorrectValues.incorrectValues('incorrect-values.json', ':nth-child(3) > .app-input');
 
-          // Type correct value and check if the input field has no red border and has that value.
+          // Type correct value and check if the input field has no red border and if that value is displayed. Pass: the input field.
           CorrectValues.correctValues(':nth-child(3) > .app-input');
 
      })

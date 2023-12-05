@@ -1,47 +1,63 @@
 /// <reference types="cypress" />
 
 import SelectProducts from '../../support/page_objects/select-products';
-import InventoryCount from '../../support/page_objects/inventory-count';
+import InputFields from '../../support/page_objects/input-fields';
+import Button from '../../support/page_objects/buttons';
 
-
-describe('Testing PCA Number on the Bining page.', () => {
+describe('Testing Cancel button on Bining page.', () => {
 
     // Log in.
-    beforeEach(() => {
+    before(() => {
         cy.loginToOptibin();
         cy.wait(1000);
         cy.visitBiningPage();
 
     })
        
-    it('Testing Comment on the Bining page.', () => {
+    it('Testing Cancel button on Bining page.', () => {
         // Open Test P6 folder.
         SelectProducts.openFolder('Test P6');
 
-        // Sellect a bining product with no channels.
+        // Sellect a bining product with two channels.
         SelectProducts.openFolder('Foo');
 
-        InventoryCount.fillInventoryCount(55);
+        const channels = ['Chrom 1 P3 (test 6)', 'Wav 01 P2 (test 6)'];
 
-        cy.get('.app-flex > :nth-child(3) > .app-input').clear().type('3');
-        cy.get('.app-flex > :nth-child(4) > .app-input').clear().type('30');
-        cy.get('.app-btn-secondary').click();
+        // Fill Inventory Count on both channels. Pass: channels and value.
+        InputFields.fillInventoryCount(channels, 55);
+
+        // Fill Number Of Setups and Spool Size, and then click on Run.
+        InputFields.numberOfSetups().clear().type('3');
+        InputFields.spoolSize().clear().type('30');
+        Button.Run().click();
         cy.wait(6000);
 
-        cy.get('.app-btn-neutral').contains('Cancel').click();
+        // Click on Cancel.
+        Button.Cancel().click();
 
-        cy.get('.app-btn-secondary').contains('Run').should('not.be.disabled');
-        cy.get('.app-btn-neutral').contains('Reset').should('exist');
-        cy.get('.app-btn-neutral').contains('Upload').should('exist');
-        cy.get('.app-btn-neutral').contains('Download').should('exist');
+        // Confirm all button's presence.
+        Button.Run().should('not.be.disabled');
+        Button.Reset().should('exist');
+        Button.Upload().should('exist');
+        Button.Download().should('exist');
 
-        cy.get('.app-btn-secondary').contains('Save').should('not.exist');
-        cy.get('.app-btn-neutral').contains('Cancel').should('not.exist');
-        cy.get('.app-btn-neutral').contains('Export').should('not.exist');
+        Button.Save().should('not.exist');
+        Button.Cancel().should('not.exist');
+        Button.Export().should('not.exist');
+        Button.Finish().should('not.exist');
 
-        cy.get(':nth-child(1) > div > :nth-child(1) > :nth-child(3) > .app-input').should('have.value', '55');
-        cy.get('.app-products-channels-block-items > :nth-child(1)').click();
-        cy.get(':nth-child(1) > div > :nth-child(1) > :nth-child(3) > .app-input').should('have.value', '55');
+        // Inventory Count is saved on both channels.
+        InputFields.firstInventoryCount().should('have.value', '55');
+
+        cy.get('.app-products-channels-block-item')
+                .contains(channels[0])
+                .click();
+                
+        InputFields.firstInventoryCount().should('have.value', '55');
+
+        // Number Of Setups and Spool Size values are saved.
+        InputFields.numberOfSetups().should('have.value', '3');
+        InputFields.spoolSize().should('have.value', '30');
         
     })
 })
