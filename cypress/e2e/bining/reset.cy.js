@@ -16,43 +16,32 @@ describe('Testing Reset button on the Bining page.', () => {
        
     it('Testing Reset button on the Bining page.', () => {
         // Open Test P6 folder.
-        SelectProducts.openFolder('Test P6');
+        SelectProducts.productInMenu('Test P6');
 
         // Sellect a bining product with two channels.
-        SelectProducts.openFolder('Foo');
+        SelectProducts.productInMenu('Foo');
 
         // Fill Number Of Setups and Spool Size.
-        InputFields.numberOfSetups().clear().type('3');
-        InputFields.spoolSize().clear().type('30');
+        InputFields.numberOfSetups().clear().type('{selectall}, 3');
+        InputFields.spoolSize().clear().type('{selectall}, 30');
 
-        // Channels.
-        const values = ['Chrom 1 P3 (test 6)', 'Wav 01 P2 (test 6)'];
+        const channels = ['Chrom 1 P3 (test 6)', 'Wav 01 P2 (test 6)'];
 
-        values.forEach((value, valueIndex) => {
-
-            // This inner forEach loop runs only during the first iteration of the outer loop.
-            if (valueIndex === 0) {
-
-                values.forEach((value) => {
-
-                    // Select a channel.
-                    cy.get('.app-products-channels-block-item')
-                        .contains(value)
-                        .click();
-        
-                    // Type 5 in the first Inventory Count.
-                    InputFields.firstInventoryCount().type('{selectall}').type('5');
-                
-                });
-            }
+        channels.forEach((channel) => {
 
             // Select a channel.
-            cy.get('.app-products-channels-block-item')
-                .contains(value)
-                .click();
+            cy.get('.app-products-channels-block-item').contains(channel).click();
 
-            // Click on Reset.
-            Button.Reset().click();
+            InputFields.firstInventoryCount().clear().type('{selectall}, 5');
+
+        });
+
+        Button.Reset().click();
+
+        channels.forEach((channel) => {
+
+            // Select a channel.
+            cy.get('.app-products-channels-block-item').contains(channel).click();
 
             // All inputs are 0.
             InputFields.firstInventoryCount().should('have.value', '0');
@@ -60,8 +49,5 @@ describe('Testing Reset button on the Bining page.', () => {
             InputFields.spoolSize().should('have.value', '0');
             
         });
-
-        
-        
     })
 })

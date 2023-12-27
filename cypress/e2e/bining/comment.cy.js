@@ -17,10 +17,10 @@ describe('Testing whether the comment is saved both on Bining and on Query page.
      it('Testing whether the comment is saved both on Bining and on Query page.', () => {
 
           // Open Test P6 folder.
-          SelectProducts.openFolder('Test P6');
+          SelectProducts.productInMenu('Test P6');
 
           // Sellect a bining product with two comments.
-          SelectProducts.openFolder('Foo');
+          SelectProducts.productInMenu('Foo');
 
           // Fill Inventory Count fields on both channels.
           const channels = ['Chrom 1 P3 (test 6)', 'Wav 01 P2 (test 6)'];

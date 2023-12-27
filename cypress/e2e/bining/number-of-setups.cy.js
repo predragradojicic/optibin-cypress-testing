@@ -18,24 +18,21 @@ describe('Testing Number of Setups on the Bining page.', () => {
      it('Testing Number of Setups on the Bining page.', () => {
           
           // Open Test P6 folder.
-          SelectProducts.openFolder('Test P6');
+          SelectProducts.productInMenu('Test P6');
 
           // Select Foo bining product.
-          SelectProducts.openFolder('Foo');
+          SelectProducts.productInMenu('Foo');
 
           // Number of setups should have value 0.
           InputFields.numberOfSetups().should('have.value', '0');
-
-          // Check if border is red after typing an incorrect value.
-          InputFields.numberOfSetups().type('.');
-          cy.get('.app-flex').click();
-          InputFields.numberOfSetups().should('have.class', 'app-border-red');
 
           // Type different incorrect values. Border should be red. Pass: JSON file from fixtures which contains incorrect values and the input field.
           IncorrectValues.incorrectValues('incorrect-values.json', ':nth-child(3) > .app-input');
 
           // Type correct value and check if the input field has no red border and if that value is displayed. Pass: the input field.
           CorrectValues.correctValues(':nth-child(3) > .app-input');
+
+          InputFields.inputArrows(':nth-child(3) > .app-input');
 
      })
 

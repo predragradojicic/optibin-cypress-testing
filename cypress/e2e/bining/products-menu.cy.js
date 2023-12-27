@@ -12,164 +12,108 @@ describe('Testing funcionality of Products menu on Bining page.', () => {
     
     })
 
-    it('Test "Products" breadcrumb navigation.', () => {
+    it('Select a folder; select an empty folder inside another folder.', () => {
+
+        // Open Test P6 folder.
+        SelectProducts.productInMenu('Test P6');
+
+        // Confirm that Test P6 is displayed. Pass: all items from the menu.
+        SelectProducts.folderIsOpenOnBiningPage('Test P6', 'Bar 1', 'Bar 2', 'Foo');
+
+        // Open Bar 1 folder.
+        SelectProducts.productInMenu('Bar 1');
+        cy.wait(1000);
+
+        // Confirm that Bar 1 is displayed. Pass: menu item and folder item.
+        SelectProducts.folderIsOpenOnBiningPage('Bar 1', 'No items');
+
+    });
+
+    it('Select a fixture; select a fixture inside a folder.', () => {
+
+        // Click on Foo.
+        SelectProducts.productInMenu('Test P3');
+
+        SelectProducts.fixtureIsOpen('Test P3', 'No Selected Channel');
+
+        // Open Test P6 folder.
+        SelectProducts.productInMenu('Test P6');
+
+        // Click on Foo.
+        SelectProducts.productInMenu('Foo');
+
+        SelectProducts.fixtureIsOpen('Foo', 'No Selected Channel');
+
+    });
+
+    it('Test breadcrumb navigation: Products/folder/folder', () => {
 
         // Click on Products in the breadcrumb navigation.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-beadcrumb')
-            .contains('Products')
-            .click();
+        SelectProducts.productInBreadcrumbMenu('Products');
+
+        // Bining page is displayed.
+        SelectProducts.biningPageIsOpen();
+
+        // Open Test P6 folder.
+        SelectProducts.productInMenu('Test P6');
+
+        // Click on "Test P6" on the breadcrumb navigation.
+        SelectProducts.productInBreadcrumbMenu('Test P6');
+
+        // Confirm that Test P6 is displayed. Pass: all items from the menu.
+        SelectProducts.folderIsOpenOnBiningPage('Test P6', 'Bar 1', 'Bar 2', 'Foo');
+
+        // Open Bar 1 folder.
+        SelectProducts.productInMenu('Bar 1');
+
+        // Click on "Test P6" on the breadcrumb navigation.
+        SelectProducts.productInBreadcrumbMenu('Bar 1');
+
+        // Confirm that Test P6 is displayed. Pass: menu item and folder item.
+        SelectProducts.folderIsOpenOnBiningPage('Bar 1', 'No items');
+
+        // Click on "Test P6" on the breadcrumb navigation.
+        SelectProducts.productInBreadcrumbMenu('Test P6');
+
+        // Confirm that Test P6 is displayed. Pass: all items from the menu.
+        SelectProducts.folderIsOpenOnBiningPage('Test P6', 'Bar 1', 'Bar 2', 'Foo');
+
+        // Click on Products in the breadcrumb navigation.
+        SelectProducts.productInBreadcrumbMenu('Products');
 
         // Bining page is displayed.
         SelectProducts.biningPageIsOpen();
 
     });
 
-    it('Select a folder which is not empty.', () => {
-        
-        // Open Test P6 folder.
-        SelectProducts.openFolder('Test P6');
-
-        cy.wait(1000);
-
-        // Confirm that Test P6 is displayed. Pass: menu item and folder item.
-        SelectProducts.folderIsOpenOnBiningPage('Foo', 'Foo');
-
-    });
-
-    it('Test "Products/folder" breadcrumb navigations.', () => {
+    it('Testing search bar.', () => {
 
         // Open Test P6 folder.
-        SelectProducts.openFolder('Test P6');
-
-        // Click on "Test P6" on the breadcrumb navigation.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-beadcrumb')
-            .contains('Test P6')
-            .click();
-
-        // Confirm that Test P6 is displayed. Pass: menu item and folder item.
-        SelectProducts.folderIsOpenOnBiningPage('Foo', 'Foo');
-
-        // Go to "Products" using the breadcrumb navigation.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-beadcrumb')
-            .contains('Products')
-            .click();
-
-        cy.wait(1000);
-
-        // Products page is displayed.
-        SelectProducts.biningPageIsOpen();
-
-    });
-
-    it('Select an empty folder within another folder.', () => {
-
-        // Open Test P6 folder.
-        SelectProducts.openFolder('Test P6');
-
-        // Open Bar 1 folder.
-        SelectProducts.openFolder('Bar 1');
-
-        cy.wait(1000);
-
-        // Confirm that Bar 1 is displayed. Pass: menu item and folder item.
-        SelectProducts.folderIsOpenOnBiningPage('No items', 'No Items');
-
-    });
-
-    it('Test "folder/folder" breadcrumb navigations.', () => {
-        
-        // Open Test P6 folder.
-        SelectProducts.openFolder('Test P6');
-
-        // Open Bar 1 folder.
-        SelectProducts.openFolder('Bar 1');
-
-        // Test "folder->folder" breadcrumb navigation.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-beadcrumb')
-            .contains('Bar 1')
-            .click();
-
-        // Confirm that Test P6 is displayed. Pass: menu item and folder item.
-        SelectProducts.folderIsOpenOnBiningPage('No items', 'No Items');
-
-        // Test "folder<-folder" breadcrumb navigation.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-beadcrumb')
-            .contains('Test P6')
-            .click();
-
-        // Confirm that Test P6 is displayed. Pass: menu item and folder item.
-        SelectProducts.folderIsOpenOnBiningPage('Foo', 'Foo');
-    });
-
-    it('Select a fixture within a folder.', () => {
-
-        // Open Test P6 folder.
-        SelectProducts.openFolder('Test P6');
-
-        // Click on Foo.
-        SelectProducts.openFolder('Foo');
-
-        // Confirm that fixture Foo is open. Pass: menu item, title and body messagge.
-        SelectProducts.fixtureIsOpen('Foo', 'Foo', 'No Selected Channel');
-        
-    });
-
-    it('Test "folder/fixture" breadcrumd navigation.', () => {
-        
-        // Open Test P6 folder.
-        SelectProducts.openFolder('Test P6');
-        cy.wait(1000);
-
-        // Open Foo fixture.
-        SelectProducts.openFolder('Foo');
-        cy.wait(1000);
-
-        // Test "folder<-fixture" breadcrumb navigation.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-beadcrumb')
-            .contains('Test P6')
-            .click();
-
-        cy.wait(1000);
-        
-        // Confirm that Test P6 is displayed. Pass: menu item and folder item.
-        SelectProducts.folderIsOpenOnBiningPage('Foo', 'Foo');
-
-    });
-
-    it('Testing the search bar.', () => {
-
-        // Open Test P6 folder.
-        SelectProducts.openFolder('Test P6');
+        SelectProducts.productInMenu('Test P6');
 
         // Initial check: All items are visible.
-        cy.get('.app-nav-map-items')
-          .find('.app-nav-map-item')
-          .should('have.length', 3);
+        SelectProducts.numberOfProducts(3);
     
-        // Type a phrase which is a part of names of two different items in the search bar.
-        cy.get('.app-input')
-            .type('Bar');
-    
-        // Check if only that two items are visible. Expect four because two are filtersd products, and the other two are filtered by name and PCA.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-item')
-            .should('have.length', 4)
-            .and('contain', 'Bar');
+        // Type "Test" in the search bar.
+        SelectProducts.searchBar().type('Bar');
+
+        SelectProducts.numberOfProducts(4).then((additional) => {
+            // Use .wrap to pass the subject to a function
+            cy.wrap(additional).and('contain', 'Bar');
+          });
+
+        SelectProducts.searchBar().clear().type('Bar 1');
+
+        SelectProducts.numberOfProducts(2).then((additional) => {
+            // Use .wrap to pass the subject to a function
+            cy.wrap(additional).and('contain', 'Bar 1');
+          });
     
         // // Clear the search bar.
-        cy.get('.app-input')
-            .clear();
+        SelectProducts.searchBar().clear();
     
-        // Check if all items are visible again.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-item')
-            .should('have.length', 3);
+        // Check: All items are visible again.
+        SelectProducts.numberOfProducts(3);
 
     });
 

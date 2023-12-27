@@ -18,10 +18,10 @@ describe('Saving a bining result on the Bining page. The result should be saved 
        
     it('Saving a bining result on the Bining page. The result should be saved on Query page.', () => {
         // Open Test P6 folder.
-        SelectProducts.openFolder('Test P6');
+        SelectProducts.productInMenu('Test P6');
 
         // Sellect a bining product with two channels.
-        SelectProducts.openFolder('Foo');
+        SelectProducts.productInMenu('Foo');
 
         // Fill Inventory Count fields on both channels.
         const channels = ['Chrom 1 P3 (test 6)', 'Wav 01 P2 (test 6)'];
@@ -29,14 +29,26 @@ describe('Saving a bining result on the Bining page. The result should be saved 
         InputFields.fillInventoryCount(channels, 55);
 
         // Fill Number Of Setups and Spool Size, and then start a run.
-        InputFields.numberOfSetups().clear().type('3');
-        InputFields.spoolSize().clear().type('30');
+        InputFields.numberOfSetups().clear().type('{selectall}, 3');
+        InputFields.spoolSize().clear().type('{selectall}, 30');
         Button.Run().click();
         cy.wait(6000);
 
         // Save.
         Button.Save().click();
         cy.wait(2000);
+
+        // Confirm all button's presence.
+        Button.Run().should('not.exist');
+        Button.Reset().should('not.exist');
+        Button.Upload().should('not.exist');
+        Button.Download().should('not.exist');
+
+        Button.Save().should('not.exist');
+        Button.Cancel().should('not.exist');
+
+        Button.Finish().should('exist');
+        Button.Export().should('exist');
 
         // Go to Query page.
         cy.visitQueryPage();

@@ -25,6 +25,7 @@ class InputFields {
     // Testing arrows for increasing and decreasing values in input fields.
     static inputArrows(input_class) {
 
+        cy.get(input_class).clear();
         cy.get(input_class).type('{uparrow}');
         cy.get(input_class).should('have.value', '1');
         cy.get(input_class).type('{downarrow}');

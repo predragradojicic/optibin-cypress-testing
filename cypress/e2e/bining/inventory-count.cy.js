@@ -17,10 +17,10 @@ describe('Testing Inventory Count on the Bining page.', () => {
        
     it('Testing Inventory Count on the Bining page.', () => {
         // Open Test P6 folder.
-        SelectProducts.openFolder('Test P6');
+        SelectProducts.productInMenu('Test P6');
 
         // Sellect a bining product which contains channels.
-        SelectProducts.openFolder('Foo');
+        SelectProducts.productInMenu('Foo');
  
         const channels = ['Chrom 1 P3 (test 6)', 'Wav 01 P2 (test 6)'];
 

@@ -18,10 +18,10 @@ describe('Start a run on Bining page.', () => {
        
     it('Start a run on Bining page.', () => {
         // Open Test P6 folder.
-        SelectProducts.openFolder('Test P6');
+        SelectProducts.productInMenu('Test P6');
 
         // Sellect a bining product with two channels.
-        SelectProducts.openFolder('Foo');
+        SelectProducts.productInMenu('Foo');
 
         // Fill all Inventory Count in both channels. Pass: value.
         const channels = ['Chrom 1 P3 (test 6)', 'Wav 01 P2 (test 6)'];
@@ -29,8 +29,8 @@ describe('Start a run on Bining page.', () => {
         InputFields.fillInventoryCount(channels, 55);
 
         // Fill Number Of Setups and Spool Size, and then start a run.
-        InputFields.numberOfSetups().clear().type('3');
-        InputFields.spoolSize().clear().type('30');
+        InputFields.numberOfSetups().clear().type('{selectall}, 3');
+        InputFields.spoolSize().clear().type('{selectall}, 30');
         Button.Run().click();
         cy.wait(6000);
 

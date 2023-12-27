@@ -48,8 +48,6 @@ describe('Testing funcionality of the main menu.', () => {
             TestMenuElements.openPage(jsonArray);
           });
 
-        // ElementInteraction.interactWithElements();
-
     })
 
 })

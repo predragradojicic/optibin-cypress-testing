@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import SelectProducts from '../../support/page_objects/select-products';
+
 describe('Testing funcionality of the main menu.', () => {
 
      // Log in.
@@ -9,76 +11,43 @@ describe('Testing funcionality of the main menu.', () => {
     
     })
 
-        
     it('Testing the search bar.', () => {
     
         // Type "Test" in the search bar.
-        cy.get('.app-input')
-            .type('Test');
-    
-        // Check: Only "Test" is visible.
+        SelectProducts.searchBar().type('Test');
+
         cy.get('.app-manufacturers-nav-map-wrapper > .app-nav-map > .app-nav-map-items > .app-nav-map-item')
             .should('have.length', 5)
             .and('contain', 'Test');
+
+        SelectProducts.searchBar().clear().type('Test P3');
+
+        cy.get('.app-manufacturers-nav-map-wrapper > .app-nav-map > .app-nav-map-items > .app-nav-map-item')
+            .should('have.length', 1)
+            .and('contain', 'Test P3');
     
         // // Clear the search bar.
-        cy.get('.app-input')
-            .clear();
+        SelectProducts.searchBar().clear();
+        cy.wait(1000);
     
         // Check: All items are visible again.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-item')
-            .contains('devMarina');
-
-    });
-
-    it('Testing if the first manufacturer is displayed after logging in.', () => {
-
-        // Confirm that Test P1 menu is displayed.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-item.active')
-            .contains('Cree (ML-E,ML-B)');
-
-        // Confirm that manufacturer Test P1 is open.
-        cy.get('.app-manufacturers-header-title-text.mb10')
-            .find('.app-manufacturers-header-title-text-active')
-            .contains('Cree (ML-E,ML-B)');
-
+        SelectProducts.productInMenu('Cree (ML-E,ML-B)');
+ 
     });
 
     it('Testing functionality of the Manufacturers menu: open two different manufacturers.', () => {
 
         // Open Test P1 manufacturer.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-item')
-            .contains('Test P1')
-            .click();
-
-        // Confirm that Test P1 menu is displayed.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-item.active')
-            .contains('Test P1');
+        SelectProducts.productInMenu('Test P1');
 
         // Confirm that manufacturer Test P1 is open.
-        cy.get('.app-manufacturers-header-title-text.mb10')
-            .find('.app-manufacturers-header-title-text-active')
-            .contains('Test P1');
+        SelectProducts.folderIsOpenOnManufacturersPage('Test P1');
 
         // Open Test P2 manufacturer.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-item')
-            .contains('Test P2')
-            .click();
-
-        // Confirm that Test P2 menu is displayed.
-        cy.get('.app-nav-map-items')
-            .find('.app-nav-map-item.active')
-            .contains('Test P2');
+        SelectProducts.productInMenu('Test P2');
 
         // Confirm that manufacturer Test P2 is open.
-        cy.get('.app-manufacturers-header-title-text.mb10')
-            .find('.app-manufacturers-header-title-text-active')
-            .contains('Test P2');
+        SelectProducts.folderIsOpenOnManufacturersPage('Test P2');
 
     });
 

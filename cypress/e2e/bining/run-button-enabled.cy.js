@@ -16,10 +16,10 @@ describe('Testing cases when Run button is enabled on Bining page.', () => {
        
     it('Testing cases when Run button is enabled on Bining page.', () => {
         // Open Test P6 folder.
-        SelectProducts.openFolder('Test P6');
+        SelectProducts.productInMenu('Test P6');
 
         // Sellect a bining product with two channels.
-        SelectProducts.openFolder('Foo');
+        SelectProducts.productInMenu('Foo');
 
         // "Run" button should be disabled.
         Button.Run().should('be.disabled');
@@ -35,19 +35,19 @@ describe('Testing cases when Run button is enabled on Bining page.', () => {
                 .click();
 
             // Type 5 in the first Inventory Count.
-            InputFields.firstInventoryCount().type('{selectall}').type('5');
+            InputFields.firstInventoryCount().type('{selectall}, 5');
 
             // "Run" button should be disabled.
             Button.Run().should('be.disabled');
 
             // Fill Number Of Setups.
-            InputFields.numberOfSetups().clear().type('3');
+            InputFields.numberOfSetups().clear().type('{selectall}, 3');
 
             // "Run" button is disabled when Spool Size is 0.
             Button.Run().should('be.disabled');
 
             // Fill Spool Size.
-            InputFields.spoolSize().clear().type('30');
+            InputFields.spoolSize().clear().type('{selectall}, 30');
 
             // "Run" button should be enabled.
             Button.Run().should('not.be.disabled');
@@ -57,21 +57,19 @@ describe('Testing cases when Run button is enabled on Bining page.', () => {
             Button.Run().should('be.disabled');
 
             // "Run" button is disabled when Number Of Setups is 0.
-            InputFields.firstInventoryCount().type('{selectall}').type('5');
+            InputFields.firstInventoryCount().type('{selectall}, 5');
             InputFields.numberOfSetups().clear();
             Button.Run().should('be.disabled');
 
             // "Run" button is disabled when Number Of Setups has incorrect value.
-            InputFields.numberOfSetups().type('4.5');
+            InputFields.numberOfSetups().type('{selectall}, 4.5');
             Button.Run().should('be.disabled');
 
             // "Run" button is disabled when Number Of Setups has incorrect value.
-            InputFields.numberOfSetups().clear().type('3');
-            InputFields.spoolSize().clear().type('4.5');
+            InputFields.numberOfSetups().clear().type('{selectall}, 3');
+            InputFields.spoolSize().clear().type('{selectall}, 4.5');
             Button.Run().should('be.disabled');
 
         });
-
     })
-
 })

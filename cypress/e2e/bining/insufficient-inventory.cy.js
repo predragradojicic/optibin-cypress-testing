@@ -16,10 +16,10 @@ describe('Testing Insufficient Inventory case on the Bining page.', () => {
        
     it('Testing Insufficient Inventory case on the Bining page.', () => {
         // Open Test P6 folder.
-        SelectProducts.openFolder('Test P6');
+        SelectProducts.productInMenu('Test P6');
 
         // Sellect a bining product with two channels.
-        SelectProducts.openFolder('Foo');
+        SelectProducts.productInMenu('Foo');
 
         // Select a channel.
         cy.get('.app-products-channels-block-item').contains('Chrom 1 P3 (test 6)').click();
