@@ -7,9 +7,7 @@ class BiningResult {
         channels.forEach((channel) => {
 
             // Confirm that bining results are displayed on both channels.
-            cy.get('.app-products-channels-block-item')
-                .contains(channel)
-                .click();
+            cy.get('.app-products-channels-block-item').contains(channel).click();
 
             // Wavelength channel has 'Recipe Wavelength' in results and chromaticity channel has 'Recipe Chromaticity' in results.
             // Chromaticity channel has a graph.

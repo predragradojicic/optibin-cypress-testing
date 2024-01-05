@@ -37,7 +37,7 @@ describe('Adding, editing and deleting colors on Nome page.', () => {
    const secondWavelengthMin = wavelengths[1].min;
    const secondWavelengthMax = wavelengths[1].max;
        
-   it.only('Flux input fields validation.', () => {
+   it('Flux input fields validation.', () => {
       // Select a manufacturer.
       Manufacturers.manufacturerOrColor('Test P3').click();
       Manufacturers.manufacturerOrColor('Color wav').click();

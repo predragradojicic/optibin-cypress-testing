@@ -8,9 +8,7 @@ class InputFields {
         channels.forEach((channel) => {
 
             // Find the input element.
-            cy.get('.app-products-channels-block-item')
-                .contains(channel)
-                .click();
+            cy.get('.app-products-channels-block-item').contains(channel).click();
                 
             // Type the passed value in each input field.
             cy.get('.app-input.ml5').each(($input) => {

@@ -19,9 +19,7 @@ describe('Testing PCA Number on the Bining page.', () => {
 
           // Check the only PCA number for bining product Foo.
           SelectProducts.productInMenu('Foo');
-          cy.get('select')
-               .select('2081')
-               .should('contain', 'PCA-322113-33');
+          cy.get('select').select('2081').should('contain', 'PCA-322113-33');
 
           cy.get('.app-bining-control.mr15').find('.app-text-gray').should('contain', '3221138');
 
@@ -40,9 +38,7 @@ describe('Testing PCA Number on the Bining page.', () => {
                });
              
           // Select the first PCA number for bining product Bar 2.
-          cy.get(':nth-child(2) > .app-input')
-               .select('2083')
-               .should('contain', 'PCA-322115-15');
+          cy.get(':nth-child(2) > .app-input').select('2083').should('contain', 'PCA-322115-15');
 
           cy.get('.app-bining-control').find('.app-text-gray').then(($el) => {
                if ($el.text() === '3221157') {

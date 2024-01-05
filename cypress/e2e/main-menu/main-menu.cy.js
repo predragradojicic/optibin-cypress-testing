@@ -14,30 +14,21 @@ describe('Testing funcionality of the main menu.', () => {
 
     it('Menu is collapsed after logging in.', () => {
         
-        cy.get('#root')
-            .find('.app-layout')
-            .should('exist')
-            .and('not.have.class', 'app-layout-expand');
+        cy.get('#root').find('.app-layout').should('exist').and('not.have.class', 'app-layout-expand');
 
     })
 
     it('Expand and collapse menu.', () => {
         
         // Expand menu
-        cy.get('.app-layout-sidebar > .app-sidebar > .app-sidebar-toggle > .noactive')
-        .click();
+        cy.get('.app-layout-sidebar > .app-sidebar > .app-sidebar-toggle > .noactive').click();
 
-        cy.get('#root .app-layout-expand')
-        .should('exist');
+        cy.get('#root .app-layout-expand').should('exist');
 
         // Collapse menu
-        cy.get('.app-layout-sidebar > .app-sidebar > .app-sidebar-toggle > .active')
-        .click();
+        cy.get('.app-layout-sidebar > .app-sidebar > .app-sidebar-toggle > .active').click();
 
-        cy.get('#root .app-layout')
-        .should('exist')
-        .and('not.have.class', 'app-layout-expand');
-
+        cy.get('#root .app-layout').should('exist').and('not.have.class', 'app-layout-expand');
         
     })
 

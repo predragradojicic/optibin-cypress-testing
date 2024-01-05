@@ -96,9 +96,7 @@ describe('Testing funcionality of Products menu on Products page.', () => {
         SelectProducts.numberOfProducts(3);
     
         // Type "Test" in the search bar.
-        cy.get('.app-nav-map-filter')
-            .find('.app-input')
-            .type('Bar');
+        cy.get('.app-nav-map-filter').find('.app-input').type('Bar');
 
         SelectProducts.numberOfProducts(4).then((additional) => {
             // Use .wrap to pass the subject to a function
@@ -113,9 +111,7 @@ describe('Testing funcionality of Products menu on Products page.', () => {
           });
 
         // // Clear the search bar.
-        cy.get('.app-nav-map-filter')
-            .find('.app-input')
-            .clear();
+        cy.get('.app-nav-map-filter').find('.app-input').clear();
     
         // Check: All items are visible again.
         SelectProducts.numberOfProducts(3);

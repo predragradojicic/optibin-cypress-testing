@@ -52,6 +52,45 @@ describe('Adding, editing and deleting products on Products page.', () => {
 
     });
 
+    it('Check initial values in input fields.', () => {
+        cy.visitProductsPage();
+
+        SelectProducts.productInFolders('Test P6');
+
+        SelectProducts.productInFolders('Foo');
+
+        Products.channel().contains('Color wav').click();
+
+        Products.forwardVoltageBins('On');
+
+        const input_fields = ['LEDs Per Pixel', 'Number Of Pixels', 'Delta X', 'Minimum Flux', 'Maximum Flux', 'Target', 'Offset', 'Minimum Forward Voltage', 'Maximum Forward Voltage', 'Minimum Wavelength', 'Maximum Wavelength'];
+
+        input_fields.forEach(field => {
+            Products.input(field).should('have.value', '0');
+
+        })
+
+        const bins = [
+            { field: 4, input: 6 },
+            { field: 4, input: 7 },
+            { field: 5, input: 6 },
+            { field: 5, input: 7 }
+        ];          
+
+        bins.forEach(bin => {
+            cy.get(`.app-product-channel-details-common-properties > :nth-child(${bin.field}) > :nth-child(${bin.input}) > .app-input`).should('have.value', '0');
+
+        })
+
+        const diverse_inputs = ['Diverse Flux', 'Diverse Wavelength'];
+
+        diverse_inputs.forEach(diverse_input => {
+            Products.input(diverse_input).should('have.value', '1');
+
+        })
+       
+    });
+
     it('The channel is present in "Used in" window on Home page.', () => {
 
         Manufacturers.manufacturerOrColor('Test P3').click();

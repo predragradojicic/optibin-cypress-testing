@@ -75,24 +75,15 @@ class IncorrectValues {
         // Iterate over the values in the JSON file
         data.values.forEach((value) => {
              // Find the input element and type values from JSON file.
-            cy.get(input_element)
-              .clear()
-              .type('{selectall}').type(value);
+            cy.get(input_element).clear().type('{selectall}').type(value);
 
-             // Click outside of the input element.
-              // cy.get('.m20').contains('Add PCA Number').click();
+            // Border should be red.
+            cy.get(input_element).should('have.class', 'app-border-red');
 
-             // Border should be red.
-              cy.get(input_element)
-                .should('have.class', 'app-border-red');
+            button.forEach((item) => {
+              cy.get('button').contains(item).should('be.disabled');
 
-                button.forEach((item) => {
-                  cy.get('button').contains(item).should('be.disabled');
-
-                });
-
-              // cy.get('button').contains(button).should('be.disabled');
-              // cy.get('.app-btn-secondary.ml20.mr20.mt20').contains(button).should('be.disabled');
+            });
 
         });
       });
@@ -120,6 +111,38 @@ class IncorrectValues {
 
       });
         
+    }
+
+    static incorrectProductInputs(input_data, input_element, button) {
+
+      cy.get(`input[placeholder="${input_element}"]`).should('not.have.class', 'app-border-red');
+
+      cy.get(`input[placeholder="${input_element}"]`).clear();
+
+      cy.get(`input[placeholder="${input_element}"]`).should('have.class', 'app-border-red');
+
+      cy.get('button').contains(button).should('exist');
+
+      // cy.get(`input[placeholder="${input_element}"]`).clear().type('{selectall}').type('0');
+      // cy.get('.app-product-channel-shortlisted-bins-content').click();
+
+      // cy.get(`input[placeholder="${input_element}"]`).should('not.have.class', 'app-border-red');
+
+      // cy.get('button').contains(button).should('not.exist');
+
+      cy.fixture(input_data).then((data) => {
+        // Iterate over the values in the JSON file
+        data.values.forEach((value) => {
+            // Find the input element and type values from JSON file.
+
+            cy.contains('.app-product-channel-details-common-properties-block', input_element).find(`input[placeholder="${input_element}"]`).clear().type('{selectall}').type(value);
+
+            cy.contains('.app-product-channel-details-common-properties-block', input_element).find(`input[placeholder="${input_element}"]`).should('have.class', 'app-border-red');
+
+            cy.get('button').contains(button).should('exist');
+
+        });
+      });
     }
 
   }

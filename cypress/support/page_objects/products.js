@@ -136,6 +136,22 @@ class Products {
         .find('.ml15').click();
     }
 
+    static input(placeholder) {
+        return cy.get(`input[placeholder="${placeholder}"]`);
+        
+    }
+
+    static forwardVoltageBins(option) {
+        cy.get('h6').contains('Forward Voltage Bins').next('.app-input').select(option);
+    }
+
+    static inputFields(placeholder, value) {
+        cy.contains('.app-product-channel-details-common-properties-block', placeholder).find(`input[placeholder="${placeholder}"]`).should('have.value', value);
+    }
+
+    
+
+
     
 
     
